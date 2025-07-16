@@ -1,0 +1,523 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-image: url('../../../assets/Right-Robot.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: -1;
+  transition: background-image 1.2s ease;
+  
+  &.signup-mode {
+    background-image: url('../../../assets/Left-Robot.png');
+  }
+}
+
+.form-container {
+  display: flex;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  min-height: 400px;
+  justify-content: flex-start;
+}
+
+.login-left {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 3rem clamp(1.5rem, 5vw, 2.5rem);
+  border-radius: 16px;
+  box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  animation: fadeIn 2s ease-out;
+  opacity: 1;
+  transition: transform 0.8s ease-out, opacity 0.5s ease-out;
+  margin: clamp(2rem, 5vw, 10rem);
+  
+  &.hidden {
+    transform: translateX(-150%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h2 {
+    margin-bottom: 0.5rem;
+    color: whitesmoke;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+  }
+
+  p {
+    margin-bottom: 2rem;
+    color: #718096;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      flex: 1;
+      padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #f9fafb;
+      width: 100%;
+
+      &:focus {
+        border-color: #3182ce;
+        background: #fff;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      left: 0.75rem;
+      font-size: 1.2rem;
+      color: #a0aec0;
+      pointer-events: none;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: #3182ce;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0;
+      outline: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .login-btn {
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+
+    &:disabled {
+      background: #b2c6e0;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: #2563eb;
+    }
+  }
+
+  .forgot-link {
+    display: block;
+    margin-top: 1rem;
+    color: #3182ce;
+    text-align: left;
+    font-size: 0.95rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .new-account-desc {
+    display: block;
+    margin-top: 1rem;
+    color: whitesmoke;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .new-account {
+    display: inline;
+    color: #3182ce;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.login-right {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 3rem clamp(1.5rem, 5vw, 2.5rem);
+  border-radius: 16px;
+  box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  transform: translateX(200%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+  margin: clamp(2rem, 5vw, 10rem);
+  
+  &.visible {
+    animation: flyInFromLeft 0.8s forwards;
+    pointer-events: auto;
+  }
+  
+  @keyframes flyInFromLeft {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  h2 {
+    margin-bottom: 0.5rem;
+    color: whitesmoke;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+  }
+
+  p {
+    margin-bottom: 2rem;
+    color: #718096;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      flex: 1;
+      padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #f9fafb;
+      width: 100%;
+
+      &:focus {
+        border-color: #3182ce;
+        background: #fff;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      left: 0.75rem;
+      font-size: 1.2rem;
+      color: #a0aec0;
+      pointer-events: none;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: #3182ce;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0;
+      outline: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .login-btn {
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+
+    &:disabled {
+      background: #b2c6e0;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: #2563eb;
+    }
+  }
+
+  .new-account-desc {
+    display: block;
+    margin-top: 1rem;
+    color: whitesmoke;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .new-account {
+    display: inline;
+    color: #3182ce;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.error-message {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  text-align: left;
+}
+
+.forgot-password {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 3rem clamp(1.5rem, 5vw, 2.5rem);
+  border-radius: 16px;
+  box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  margin: clamp(2rem, 5vw, 10rem);
+  animation: fadeIn 2s ease-out;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: static;
+  z-index: 1;
+
+  h2 {
+    margin-bottom: 0.5rem;
+    color: whitesmoke;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+  }
+
+  .forgot-link {
+    display: block;
+    margin-top: 1rem;
+    color: #3182ce;
+    text-align: left;
+    font-size: 0.95rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      flex: 1;
+      padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #f9fafb;
+      width: 100%;
+
+      &:focus {
+        border-color: #3182ce;
+        background: #fff;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      left: 0.75rem;
+      font-size: 1.2rem;
+      color: #a0aec0;
+      pointer-events: none;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: #3182ce;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0;
+      outline: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .login-btn {
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+
+    &:disabled {
+      background: #b2c6e0;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: #2563eb;
+    }
+  }
+}
+
+.forgot-link, .new-account {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  text-decoration: underline;
+  color: inherit;
+}
+
+.forgot-link:hover, .new-account:hover {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .login-left, .login-right {
+    margin: 1rem;
+  }
+  
+  .form-container {
+    padding: 1rem;
+  }
+
+  .forgot-password {
+    margin: 1rem;
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    background-position: 70% center;
+  }
+  
+  .login-left, .login-right {
+    padding: 2rem 1rem;
+  }
+
+  .no-access-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  background: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 40px 24px;
+  margin: 40px auto;
+  max-width: 400px;
+
+  h2 {
+    color: #4a5c96;
+    margin-bottom: 12px;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  p {
+    color: #555;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 0;
+  }
+}
+}

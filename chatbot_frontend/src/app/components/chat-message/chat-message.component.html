@@ -1,0 +1,83 @@
+<ng-container *ngIf="projectId !== null; else noProject"> 
+
+  <div class="chat-handler">
+
+      <div class="backheader"> 
+          <div class="header-content">
+              <div class="header-btn-left">
+                  <span>Chat Interface</span>
+              </div>
+              <div class="header-btn-right">
+                  <button class="data-handler-btn" (click)="backToUpload()">Data Handler</button>
+                  <button class="log-out-btn" (click)="logout()">Log Out</button>
+              </div>
+          </div>
+      </div>
+      
+      <div class="sections-container">
+          <div class="left-section">
+              <div class="chat-message-container">
+                  <ng-container *ngIf="messages.length === 0; else chatContent">
+                    <div class="welcome-box">
+                      <div class="welcome-header">Hello User, Greetings!</div>
+                      <div class="welcome-message">Welcome to the AI ChatBot. You can ask any question and get instant answers powered by AI.</div>
+                      <form class="welcome-form" (submit)="$event.preventDefault(); chatmessage();">
+                        <input type="text" [(ngModel)]="userInput" name="welcomeInput" placeholder="Type your question here..." autocomplete="off" />
+                        <button type="submit">Send</button>
+                      </form>
+                      <div class="welcome-info">You can ask your question to the AI model which will provide you the answer.</div>
+                    </div>
+                  </ng-container>
+                  <ng-template #chatContent>
+                    <div class="messages">
+                      <div *ngFor="let msg of messages" [ngClass]="{'user-message': msg.role === 'user', 'assistant-message': msg.role === 'assistant'}" class="message">
+                          <ng-container *ngIf="msg.role === 'user'; else assistantMsgBlock">
+                            <div class="user-content-row">
+                              <span class="message-text">{{ msg.text }}</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" alt="User" class="avatar user-avatar" viewBox="0 0 448 512">
+                                  <path fill="#ffffff" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                              </svg>
+                            </div>
+                          </ng-container>
+                          <ng-template #assistantMsgBlock>
+                            <div class="assistant-content-row">
+                              <svg xmlns="http://www.w3.org/2000/svg" alt="Assistant" class="avatar assistant-avatar" viewBox="0 0 640 512">
+                                  <path fill="#4a5c96" d="M320 0c17.7 0 32 14.3 32 32l0 64 120 0c39.8 0 72 32.2 72 72l0 272c0 39.8-32.2 72-72 72l-304 0c-39.8 0-72-32.2-72-72l0-272c0-39.8 32.2-72 72-72l120 0 0-64c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zM264 256a40 40 0 1 0 -80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224l16 0 0 192-16 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-16 0 0-192 16 0z"/>
+                              </svg>
+                              <div class="assistant-message-block">
+                                <span class="message-text">{{ msg.text }}</span>
+                                <ng-container *ngIf="msg.citation_info && msg.citation_info.length > 0">
+                                  <div class="citation-info">
+                                    <div *ngFor="let cite of msg.citation_info">
+                                      <span class="citation-label">Source:</span>
+                                      <span class="citation-file">{{ cite.file_name.split('\\').pop() }}</span>
+                                      <span class="citation-page">(Page: {{ cite.page_number }})</span>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-template>
+                      </div>
+                    </div>
+                    <div class="footer">
+                        <input type="text" [(ngModel)]="userInput" placeholder="Ask your question to the ChatBot..." (keyup.enter)="chatmessage()" [disabled]="inputDisabled" />
+                        <button (click)="chatmessage()" [disabled]="inputDisabled">Send</button>
+                    </div>
+                    <div class="export-btn-row">
+                        <button class="export-btn" (click)="exportChatAsPDF()" [disabled]="!sessionId || messages.length === 0">Export as PDF</button>
+                        <button class="export-btn" (click)="exportChatAsTXT()" [disabled]="!sessionId || messages.length === 0">Export as TXT</button>
+                    </div>
+                  </ng-template>
+              </div>
+          </div>
+      </div>
+      
+  </div>
+</ng-container>
+<ng-template #noProject>
+  <div class="no-project-message">
+    <h2>No project selected.</h2>
+    <p>Please select an existing project or create a new one to access the chat interface.</p>
+  </div>
+</ng-template>

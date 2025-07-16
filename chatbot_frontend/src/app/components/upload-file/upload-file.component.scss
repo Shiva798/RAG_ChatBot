@@ -1,0 +1,554 @@
+// ===================
+// Variables
+// ===================
+$primary-color: #4a5c96;
+$secondary-color: #2c3e50;
+$background-light: #f8f9fa;
+$text-muted: #6c757d;
+$white: #ffffff;
+$border-light: #e9ecef;
+$hover-bg: #f0f7ff;
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(74, 92, 150, 0.15);
+$shadow-strong: rgba(74, 92, 150, 0.3);
+$modal-overlay: rgba(0, 0, 0, 0.5);
+
+// ===================
+// Mixins
+// ===================
+@mixin button-hover {
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+@mixin card-shadow {
+  box-shadow: 0 4px 12px $shadow-light;
+  border-radius: 12px;
+}
+
+// ===================
+// Main Container
+// ===================
+.data-handler {
+  font-family: "Lucida Sans Regular", "Lucida Sans Unicode", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  .backheader {
+    border-bottom: 2px solid $primary-color;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5em;
+
+      .header-btn-left {
+        align-content: center;
+
+        span {
+          color: $secondary-color;
+          font-weight: 700;
+        }
+      }
+
+      .header-btn-right {
+        .log-out-btn {
+          border: 2px solid $primary-color;
+          border-radius: 10px;
+          color: $secondary-color;
+          background: rgba($white, 0.1);
+          padding: 8px 16px;
+          cursor: pointer;
+          font-family: inherit;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: $secondary-color;
+            color: $white;
+            background-color: $secondary-color;
+            @include button-hover;
+          }
+        }
+      }
+    }
+  }
+
+  .upload-container {
+    .upload-content {
+      text-align: center;
+      background-color: $background-light;
+      color: $primary-color;
+      border: 1px solid $border-light;
+      @include card-shadow;
+
+      .drag-drop-area {
+        height: 100px;
+        border-radius: 12px;
+        border: 2px dashed $primary-color;
+        background: $white;
+        padding: 2rem;
+        margin: 0 auto;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background: $hover-bg;
+          border-color: $secondary-color;
+          box-shadow: 0 6px 20px $shadow-medium;
+          @include button-hover;
+        }
+
+        p {
+          color: $secondary-color;
+          margin: 0.5rem 0;
+          font-size: 1.1rem;
+        }
+
+        button {
+          background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+          color: $white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 1rem;
+          font-size: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px $shadow-strong;
+            background: linear-gradient(135deg, $secondary-color 0%, #1a252f 100%);
+          }
+
+          svg {
+            margin: 0;
+          }
+        }
+      }
+
+      .supported-formats {
+        font-size: 0.95em;
+        color: $text-muted;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+
+        strong {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .table-container {
+    margin-top: 2rem;
+
+    .table-content {
+      padding: 1rem 1rem 0 1rem;
+      background: $white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px $shadow-light;
+      border: 1px solid $border-light;
+
+      h2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        background: $primary-color;
+        color: $white;
+        padding: 1rem;
+      }
+
+      .stepper-section {
+        margin-bottom: 1em;
+
+        .stepper {
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+          margin-bottom: 0.5em;
+
+          div {
+            width: 2em;
+            height: 2em;
+            border-radius: 50%;
+            background: #e0e0e0;
+            text-align: center;
+            line-height: 2em;
+            font-weight: bold;
+
+            &.active {
+              background: $primary-color;
+              color: $white;
+            }
+          }
+        }
+        .instructions {
+          margin-bottom: 1em;
+        }
+      }
+
+      .uploaded-files-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1rem;
+
+        thead,
+        tfoot {
+          background: rgb(229, 228, 228);
+
+          th, td {
+            color: black;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+          }
+        }
+
+        .active-page {
+          background: $white;
+          color: black;
+          border-radius: 50%;
+          width: 2em;
+          height: 2em;
+          font-weight: bold;
+        }
+
+        tbody {
+          tr {
+            &:nth-child(even) {
+              background: $background-light;
+            }
+            &:hover {
+              background: $hover-bg;
+            }
+          }
+          td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid $border-light;
+          }
+          button {
+            background: #ff4d4f;
+            color: $white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+            &:hover {
+              background: darken(#ff4d4f, 10%);
+            }
+          }
+          input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 2em 0 1.5em;
+    gap: 1em;
+
+    button,
+    .btn {
+      padding: 0.5em 2em;
+      border-radius: 2em;
+      border: none;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      background-color: $primary-color;
+      color: #fff;
+
+      &.btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+      &.btn-primary {
+        background: $primary-color;
+        color: #fff;
+      }
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      &:hover:not(:disabled) {
+        background-color: darken($primary-color, 10%);
+        @include button-hover;
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: $modal-overlay;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .modal {
+      background: $white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 40%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        h3 { margin: 0; }
+
+        .close-button {
+          background-color: transparent;
+          color: #ff0000;
+          border: none;
+          font-size: 18px;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 5px 10px;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+
+          &:focus { outline: none; }
+        }
+      }
+
+      .file-list {
+        max-height: 200px;
+        overflow-y: auto;
+        margin: 10px 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
+
+        li {
+          padding: .5em;
+          border: 1px solid #d6d6d6;
+          border-radius: 5px;
+        }
+
+        .remove-file-btn {
+          margin-left: 8px;
+          background: transparent;
+          border: none;
+          color: #d9534f;
+          font-size: 1.2em;
+          cursor: pointer;
+          line-height: 1;
+        }
+      }
+
+      .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+          padding: 8px 12px;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+          background-color: $primary-color;
+          color: $white;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+            @include button-hover;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: $modal-overlay;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    pointer-events: all;
+    user-select: none;
+    overflow: hidden;
+
+    .spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      width: 60px;
+      height: 60px;
+      animation: spin360 1s linear infinite;
+      display: block;
+    }
+    .loading-message {
+      margin-top: 16px;
+      color: #ffffff;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+  }
+
+  // Disable pointer events for everything except loading overlay when loading
+  .loading-overlay ~ * {
+    pointer-events: none !important;
+    user-select: none !important;
+    filter: blur(2px) grayscale(0.2) brightness(0.9);
+  }
+
+  @keyframes spin360 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .uploaded-files-table tfoot button {
+    border: none;
+    background-color: inherit;
+    color: white;
+  }
+
+  .instructions {
+    margin-bottom: 1em;
+  }
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+    margin-top: 1em;
+  }
+
+  .project-card.selected {
+    border: 2px solid #007b7f;
+    background: #e6f7fa;
+    box-shadow: 0 0 8px #007b7f33;
+  }
+
+  .project-card.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+// ===== Additional Sources Section =====
+.additional-sources-section {
+
+  label {
+    font-weight: 600;
+    color: $primary-color;
+    margin-right: 0.5em;
+    display: inline-block;
+    margin-bottom: 0.5em;
+  }
+
+  input[type="text"] {
+    padding: 0.5em 1em;
+    border: 1px solid $primary-color;
+    border-radius: 0.5em;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+    &:focus {
+      border-color: $secondary-color;
+    }
+  }
+
+  select {
+    padding: 0.5em 1em;
+    border: 1px solid $primary-color;
+    border-radius: 0.5em;
+    font-size: 1em;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+    &:focus {
+      border-color: $secondary-color;
+    }
+  }
+
+  .button-container {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+
+    .btn {
+      padding: 0.5em 2em;
+      border-radius: 2em;
+      border: none;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      &.btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+      &.btn-primary {
+        background: $primary-color;
+        color: #fff;
+      }
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .chaticon-firstContainer {
+        bottom: 5rem;
+    }
+  }
+
+  .chaticon-firstContainer {
+    position: fixed;
+    bottom: 5rem;
+    right: 6rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+  }
+
+}

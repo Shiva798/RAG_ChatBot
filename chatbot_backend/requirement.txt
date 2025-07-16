@@ -1,0 +1,15 @@
+fastapi
+python-dotenv
+langchain-groq
+langchain-community
+pypdf
+langchain-huggingface
+faiss-cpu
+langchain-chroma
+passlib
+python-jose
+pydantic[email]
+python-multipart
+pandas
+sentence-transformers
+wikipedia

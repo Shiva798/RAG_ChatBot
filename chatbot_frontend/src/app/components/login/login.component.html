@@ -1,0 +1,132 @@
+<div class="login-container" [ngClass]="{'signup-mode': isSignupMode}">
+  <div class="form-container">
+    <div class="login-left" *ngIf="!isForgotPassword" 
+    [ngClass]="{'hidden': isSignupMode || isForgotPassword}">
+      <h2>Welcome Back</h2>
+      <p>I'm your RAG-powered assistant ask me anything, and I'll fetch the most relevant answer just for you</p>
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="input-group">
+          <input
+            type="text"
+            placeholder="User Name"
+            name="username"
+            [(ngModel)]="username"
+            required
+          />
+          <span class="icon">👤</span>
+        </div>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            name="password"
+            [(ngModel)]="password"
+            required
+          />
+          <span class="icon">🔒</span>
+          <button type="button" class="show-btn" (click)="togglePassword()">
+            {{ showPassword ? 'HIDE' : 'SHOW' }}
+          </button>
+        </div>
+        <button type="button" class="forgot-link" (click)="showForgot($event)">Forgot Password?</button>
+        <button class="login-btn" [disabled]="!loginForm.valid">Login</button>
+        <span class="new-account-desc">Don't have an account? <button type="button" class="new-account" (click)="toggleSignupMode($event)">Sign Up</button></span>
+      </form>
+    </div>
+
+    <div class="forgot-password" *ngIf="isForgotPassword">
+      <h2>Forgot Password</h2>
+      <form (ngSubmit)="onForgotPassword()" #forgotForm="ngForm">
+        <div class="input-group">
+          <input
+            type="text"
+            placeholder="User Name"
+            name="forgotUsername"
+            [(ngModel)]="forgotUsername"
+            required
+          />
+          <span class="icon">👤</span>
+        </div>
+        <div class="input-group">
+          <input
+            [type]="showForgotPassword ? 'text' : 'password'"
+            placeholder="New Password"
+            name="newPassword"
+            [(ngModel)]="newPassword"
+            (input)="onNewPasswordChange()"
+            required
+          />
+          <span class="icon">🔒</span>
+          <button type="button" class="show-btn" (click)="toggleForgotPassword()">
+            {{ showForgotPassword ? 'HIDE' : 'SHOW' }}
+          </button>
+        </div>
+        <div *ngIf="newPasswordErrors.length > 0" class="error-message">
+          <div *ngFor="let error of newPasswordErrors">{{ error }}</div>
+        </div>
+        <button class="login-btn" [disabled]="!isForgotFormValid()">Submit</button>
+        <button type="button" class="forgot-link" (click)='backtoLogin()'>Back to Login</button>
+      </form>
+    </div>
+    
+    <div class="login-right" [ngClass]="{'visible': isSignupMode}">
+      <h2>Create Account</h2>
+      <p>Join our community and get personalized answers with our RAG-powered assistant</p>
+      <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+        <div class="input-group">
+          <input
+            type="text"
+            placeholder="User Name"
+            name="username" 
+            [(ngModel)]="username"
+            required
+          />
+          <span class="icon">👤</span>
+        </div>
+        <div class="input-group">
+          <input
+            type="email"
+            placeholder="Email ID"
+            name="email"
+            [(ngModel)]="email"
+            required
+          />
+          <span class="icon">👤</span>
+        </div>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            name="password"
+            [(ngModel)]="password"
+            (input)="onPasswordChange()"
+            required
+          />
+          <span class="icon">🔒</span>
+          <button type="button" class="show-btn" (click)="togglePassword()">
+            {{ showPassword ? 'HIDE' : 'SHOW' }}
+          </button>
+        </div>
+        <div *ngIf="passwordErrors.length > 0" class="error-message">
+          <div *ngFor="let error of passwordErrors">{{ error }}</div>
+        </div>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+            (input)="checkPasswordMatch()"
+          />
+          <span class="icon">🔒</span>
+        </div>
+        <div *ngIf="passwordMismatch" class="error-message">
+          Passwords do not match
+        </div>
+        <button class="login-btn" [disabled]="!isSignupFormValid()">Sign Up</button>
+        <span class="new-account-desc">Already have an account? <button type="button" class="new-account" (click)="toggleSignupMode($event)">Login</button></span>
+      </form>
+    </div>
+  </div>
+</div>

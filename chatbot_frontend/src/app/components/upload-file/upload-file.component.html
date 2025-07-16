@@ -1,0 +1,293 @@
+<ng-container *ngIf="isAuthenticated; else notLoggedIn">
+
+  <div class="data-handler">
+
+      <div *ngIf="isLoading" class="loading-overlay">
+        <div class="spinner-container">
+          <svg class="spinner" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+            <path fill="#4a5c96" d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/>
+          </svg>
+          <div class="loading-message">Please Wait...</div>
+        </div>
+      </div>
+
+      <div class="backheader"> 
+          <div class="header-content">
+              <div class="header-btn-left">
+                  <span>Data Handling and Pre-Processing</span>
+              </div>
+              <div class="header-btn-right">
+                  <button class="log-out-btn" (click)="logout()">Log Out</button>
+              </div>
+          </div>
+      </div>
+
+      <div class="upload-container">
+          <div class="upload-content">
+            <div class="drag-drop-area"
+              (drop)="onFileDrop($event)"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (click)="fileInput.click()"
+            >
+              <p style="font-weight: bold;">Click here to upload your file or drag</p>
+              <button style="font-weight: bold;" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path fill="#007b7f" d="M384 480l48 0c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224l-400 0c-11.4 0-21.9 6-27.6 15.9L48 357.1 48 96c0-8.8 7.2-16 16-16l117.5 0c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8L416 144c8.8 0 16 7.2 16 16l0 32 48 0 0-32c0-35.3-28.7-64-64-64L298.5 96c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l23.7 0L384 480z"/></svg>
+                Browse
+              </button>
+              <br>
+              <p class="supported-formats">
+              <strong>{{supportedFormatsText}}</strong> 
+              </p>
+              <input #fileInput type="file" multiple (change)="onFileSelect($event)" hidden/>
+            </div>
+          </div> 
+      </div>
+
+      <div class="table-container">
+        <div class="table-content">
+          <h2>Uploaded Files</h2>
+          <div class="stepper-section">
+            <div class="stepper">
+              <div [class.active]="step === 1">1</div>
+              <span>Select Files</span>
+              <div [class.active]="step === 2">2</div>
+              <span>Project Section</span>
+              <div [class.active]="step === 3">3</div>
+              <span>Initialize Chat</span>
+            </div>
+            <div class="instructions" *ngIf="step === 1">
+              <br>
+              <strong>Step 1 : File Selection</strong>
+              <p>
+                You can select up to 3 files to create a project.<br>
+                Please choose the files to proceed with project creation or continue to the next screen to join an existing project.
+              </p>
+            </div>
+            <div class="instructions" *ngIf="step === 2">
+              <br>
+              <strong>Step 2 : Project Section</strong>
+              <p>
+                Create Project or Join Existing Project.
+              </p>
+            </div>
+            <div class="instructions" *ngIf="step === 3">
+              <br>
+              <strong>Step 3 : Initialize Chat</strong>
+              <p>
+                Click on confirm to intialize the chat.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 1: Table Section -->
+          <ng-container *ngIf="step === 1">
+            <table class="uploaded-files-table">
+              <!-- ...table code as before... -->
+              <thead>
+                <tr>
+                  <th *ngFor="let header of tableHeaders; let i = index"
+                      draggable="true"
+                      (dragstart)="onHeaderDragStart($event, i)"
+                      (dragover)="onHeaderDragOver($event, i)"
+                      (drop)="onHeaderDrop($event, i)">
+                    {{ header.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="apiFiles.length === 0">
+                  <td [attr.colspan]="tableHeaders.length" style="text-align:center; color: #888;">
+                    No data is available
+                  </td>
+                </tr>
+                <ng-container *ngIf="apiFiles.length > 0">
+                  <tr *ngFor="let file of apiFiles.slice((currentPage-1)*pageSize, currentPage*pageSize)">
+                    <td *ngFor="let header of tableHeaders">
+                      <ng-container [ngSwitch]="header.key">
+                        <input 
+                          *ngSwitchCase="'select'" 
+                          type="checkbox" 
+                          [checked]="file.selected"
+                          (change)="onFileCheckboxChange(file, $event)"
+                        >
+                        <span *ngSwitchCase="'name'">{{ file.file_name }}</span>
+                        <span *ngSwitchCase="'type'">{{ file.file_name.split('.').pop()?.toUpperCase() }}</span>
+                        <span *ngSwitchCase="'uploadedAt'">{{ file.uploaded_at }}</span>
+                        <button *ngSwitchCase="'delete'" (click)="deleteFile(file)">Delete</button>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td [attr.colspan]="tableHeaders.length" style="text-align:left;">
+                    <!-- ...pagination buttons as before... -->
+                    <button style="margin-right: 1em;" (click)="goToFirstPage()" [disabled]="currentPage === 1">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="0.8em" viewBox="0 0 512 512">
+                        <path fill="#636363" d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/>
+                      </svg>
+                    </button>
+                    <button style="margin-right: 1em;" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="0.8em" viewBox="0 0 320 512">
+                        <path fill="#636363" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
+                      </svg>
+                    </button>
+                    <span *ngFor="let page of [].constructor(totalPages); let i = index">
+                      <button 
+                        [ngClass]="{'active-page': currentPage === (i+1)}"
+                        (click)="goToPage(i+1)">
+                        {{i+1}}
+                      </button>
+                    </span>
+                    <button style="margin-left: 1em;" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="0.8em" viewBox="0 0 320 512">
+                        <path fill="#636363" d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
+                      </svg>
+                    </button>
+                    <button style="margin-left: 1em;" (click)="goToLastPage()" [disabled]="currentPage === totalPages">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="0.8em" viewBox="0 0 512 512">
+                        <path fill="#636363" d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/>
+                      </svg>
+                    </button>
+                    <span style="float:right;">
+                      {{currentPage}} of {{totalPages}} pages ({{apiFiles.length}} items)
+                    </span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div class="button-container">
+              <button class="btn btn-primary" (click)="goTowikiChat()">Chat with Wiki</button>
+              <button (click)="goToNextStep()">Next</button>
+            </div>
+          </ng-container>
+
+          <!-- Step 2: Project Table Section -->
+          <ng-container *ngIf="step === 2">
+            <div class="project-table-section">
+              <table class="uploaded-files-table">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Project ID</th>
+                    <th>Project Name</th>
+                    <th>Created At</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="projectsList.length === 0">
+                    <td [attr.colspan]="5" style="text-align:center; color: #888;">
+                      No projects available
+                    </td>
+                  </tr>
+                  <tr *ngFor="let project of projectsList">
+                    <td>
+                      <input
+                        type="checkbox"
+                        [checked]="selectedProjectId === project.project_id"
+                        (change)="onProjectCheckboxChange(project.project_id, $event)"
+                      >
+                    </td>
+                    <td>{{ project.project_id }}</td>
+                    <td>{{ project.project_name }}</td>
+                    <td>{{ project.created_at }}</td>
+                    <td>
+                      <button (click)="deleteProject(project.project_id)">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="button-container" style="margin-top: 2rem;">
+                <button (click)="openProjectModal()" [disabled]="selectedFileIds.length === 0" class="btn btn-primary">
+                  Create Project
+                </button>
+                <button class="btn btn-secondary" (click)="goToPreviousStep()">Back</button>
+                <button (click)="goToNextStep()" class="btn btn-primary">Next</button>
+              </div>
+            </div>
+
+            <!-- Modal for creating project -->
+            <div class="modal-overlay" *ngIf="showProjectModal">
+              <div class="modal">
+                <div class="modal-header">
+                  <h3>Create New Project</h3>
+                  <button class="close-button" (click)="closeProjectModal()">X</button>
+                </div>
+                <br>
+                <div style="margin-bottom: 1rem;">
+                  <label for="newProjectName"><strong>Project Name:</strong></label>
+                  <input
+                    id="newProjectName"
+                    type="text"
+                    [(ngModel)]="newProjectName"
+                    placeholder="Project Name"
+                    style="margin-left: 1em;"
+                  />
+                </div>
+                <div class="modal-buttons">
+                  <button [disabled]="isLoading" (click)="createProjectFromModal()">
+                    <span *ngIf="isLoading">Creating...</span>
+                    <span *ngIf="!isLoading">Create</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Step 3: Final Step Section -->
+          <ng-container *ngIf="step === 3">
+            <div class="final-step-section">
+              <div class="project-summary" *ngIf="currentProject">
+                <h3>Project Summary</h3>
+                <p><strong>Project Name:</strong> {{ currentProject.project_name }}</p>
+                <div *ngIf="currentProject.file_names && currentProject.file_names.length > 0">
+                  <strong>Files:</strong>
+                  <ul>
+                    <li *ngFor="let fname of currentProject.file_names">{{ fname }}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="button-container">
+                <button class="btn btn-secondary" (click)="goToPreviousStep()">Back</button>
+                <button class="btn btn-primary" (click)="confirmProjectAction()">Confirm</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal">
+              <div class="modal-header">
+                  <h3>Selected Files</h3>
+                  <button class="close-button" (click)="closeModal()">X</button>
+              </div>
+              <ul class="file-list">
+                <li *ngFor="let file of selectedFiles; let i = index">
+                  {{ file.name }}
+                  <button class="remove-file-btn" (click)="removeSelectedFile(i)" title="Remove file">×</button>
+                </li>
+              </ul>
+
+              <div class="modal-buttons">
+                <button [disabled]="isUploading" (click)="triggerFileSelect()">Select More Files</button>
+                <button [disabled]="isUploading" (click)="uploadFiles()">
+                  <span *ngIf="isUploading">Uploading...</span>
+                  <span *ngIf="!isUploading">Upload</span>
+                </button>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+</ng-container>
+<ng-template #notLoggedIn>
+  <div class="no-access-message">
+    <h2>Access Denied</h2>
+    <p>Login to the page to get access for upload file.</p>
+  </div>
+</ng-template>
